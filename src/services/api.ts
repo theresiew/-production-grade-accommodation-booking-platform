@@ -3,8 +3,14 @@ import { Listing, SearchFilters } from '@/types';
 
 const apiKey = import.meta.env.VITE_RAPID_API_KEY;
 
+if (!apiKey) {
+  // Fail fast so deployment/config issues are visible instead of silent request failures.
+  throw new Error('Missing VITE_RAPID_API_KEY in environment variables.');
+}
+
 export const api = axios.create({
   baseURL: 'https://airbnb19.p.rapidapi.com/api/v2',
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
     'x-rapidapi-host': 'airbnb19.p.rapidapi.com',
@@ -100,4 +106,17 @@ export function isRateLimitError(error: unknown): boolean {
     return false;
   }
   return error.response?.status === 429;
+}
+
+export function toUserErrorMessage(error: unknown): string {
+  if (!axios.isAxiosError(error)) {
+    return 'Unexpected error occurred. Please try again.';
+  }
+  if (error.response?.status === 429) {
+    return 'Rate limit reached. Please wait a moment and retry.';
+  }
+  if (error.code === 'ECONNABORTED') {
+    return 'Request timed out. Check your connection and try again.';
+  }
+  return 'Could not reach the listings service right now.';
 }
