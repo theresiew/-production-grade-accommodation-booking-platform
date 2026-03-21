@@ -37,7 +37,7 @@ export function BookingsPage() {
           >
             <h3 className="m-0 text-lg font-semibold">{booking.listingTitle}</h3>
             <p className="mb-2 mt-2 text-[#5f6c7b]">
-              {booking.checkin} to {booking.checkout} · {booking.guests} guests
+              {booking.checkin} to {booking.checkout} {'\u00b7'} {booking.guests} guests
             </p>
             <p className="mt-0">Status: {booking.status}</p>
             <button

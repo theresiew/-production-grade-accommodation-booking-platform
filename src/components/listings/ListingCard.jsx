@@ -11,7 +11,7 @@ export function ListingCard({ listing }) {
         <h3 className="m-0 text-base font-semibold">{listing.title}</h3>
         <p className="m-0 text-[#5f6c7b]">{listing.location}</p>
         <p className="m-0 text-[#5f6c7b]">
-          {listing.rating.toFixed(1)} star rating · {listing.pricePerNight} {listing.currency} / night
+          {listing.rating.toFixed(1)} star rating &middot; {listing.pricePerNight} {listing.currency} / night
         </p>
       </div>
       <div className="mt-auto flex gap-2 p-3">

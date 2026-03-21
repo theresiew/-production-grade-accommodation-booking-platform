@@ -47,7 +47,7 @@ export function ListingDetailsPage() {
         </Link>
         <h1 className="mb-3 mt-4 text-3xl font-semibold">{listing.title}</h1>
         <p className="m-0 text-[#5f6c7b]">
-          {listing.location} · {listing.rating.toFixed(1)} stars · Hosted by {listing.hostName}
+          {listing.location} {'\u00b7'} {listing.rating.toFixed(1)} stars {'\u00b7'} Hosted by {listing.hostName}
         </p>
         <p className="mb-0 mt-4 leading-7">{listing.description}</p>
 
