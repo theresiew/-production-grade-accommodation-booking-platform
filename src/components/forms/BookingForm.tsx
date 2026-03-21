@@ -10,13 +10,20 @@ export function BookingForm({ listing }: BookingFormProps) {
   const [checkin, setCheckin] = useState('');
   const [checkout, setCheckout] = useState('');
   const [guests, setGuests] = useState(1);
+  const [validationError, setValidationError] = useState('');
   const createBooking = useCreateBookingMutation();
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!checkin || !checkout) {
+      setValidationError('Please select both check-in and check-out dates.');
       return;
     }
+    if (new Date(checkout) <= new Date(checkin)) {
+      setValidationError('Check-out date must be after check-in date.');
+      return;
+    }
+    setValidationError('');
 
     await createBooking.mutateAsync({
       listingId: listing.id,
@@ -42,7 +49,13 @@ export function BookingForm({ listing }: BookingFormProps) {
 
       <label>
         Check-out
-        <input type="date" value={checkout} onChange={(event) => setCheckout(event.target.value)} required />
+        <input
+          type="date"
+          value={checkout}
+          min={checkin || undefined}
+          onChange={(event) => setCheckout(event.target.value)}
+          required
+        />
       </label>
 
       <label>
@@ -61,6 +74,7 @@ export function BookingForm({ listing }: BookingFormProps) {
       </button>
 
       {createBooking.isSuccess ? <p className="success-text">Booking confirmed.</p> : null}
+      {validationError ? <p className="error-text">{validationError}</p> : null}
       {createBooking.isError ? <p className="error-text">Could not create booking. Try again.</p> : null}
     </form>
   );
