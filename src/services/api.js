@@ -2,10 +2,6 @@ import axios from 'axios';
 
 const apiKey = import.meta.env.VITE_RAPID_API_KEY;
 
-if (!apiKey) {
-  throw new Error('Missing VITE_RAPID_API_KEY in environment variables.');
-}
-
 export const api = axios.create({
   baseURL: 'https://airbnb19.p.rapidapi.com/api/v2',
   timeout: 10000,
@@ -127,6 +123,10 @@ function discoverListingCandidates(payload) {
 }
 
 export async function fetchListings(filters) {
+  if (!apiKey) {
+    throw new Error('Missing VITE_RAPID_API_KEY. Add it in Vercel environment variables.');
+  }
+
   const response = await api.get('/searchPropertyByPlaceId', {
     params: {
       placeId: filters.placeId,
@@ -166,6 +166,9 @@ export function isRateLimitError(error) {
 }
 
 export function toUserErrorMessage(error) {
+  if (error instanceof Error && error.message.includes('VITE_RAPID_API_KEY')) {
+    return 'API key is missing in deployment settings. Add VITE_RAPID_API_KEY in Vercel and redeploy.';
+  }
   if (!axios.isAxiosError(error)) {
     return 'Unexpected error occurred. Please try again.';
   }
