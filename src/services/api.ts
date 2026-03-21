@@ -89,7 +89,7 @@ export async function fetchListings(filters: SearchFilters): Promise<Listing[]> 
 
   return normalized.filter((item) => {
     const matchesQuery = !filters.query || item.title.toLowerCase().includes(filters.query.toLowerCase());
-    const matchesRating = !filters.minRating || item.rating >= filters.minRating;
+    const matchesRating = !filters.minRating || item.rating === 0 || item.rating >= filters.minRating;
     const matchesMin = filters.minPrice === undefined || item.pricePerNight >= filters.minPrice;
     const matchesMax = filters.maxPrice === undefined || item.pricePerNight <= filters.maxPrice;
     return matchesQuery && matchesRating && matchesMin && matchesMax;
