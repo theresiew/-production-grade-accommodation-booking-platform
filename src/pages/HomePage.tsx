@@ -6,7 +6,7 @@ import { ErrorState } from '@/components/ui/ErrorState';
 import { Loader } from '@/components/ui/Loader';
 import { useFilters } from '@/context/FiltersContext';
 import { useListingsQuery } from '@/hooks/useListingsQuery';
-import { isRateLimitError } from '@/services/api';
+import { toUserErrorMessage } from '@/services/api';
 
 export function HomePage() {
   const { filters, updateFilters } = useFilters();
@@ -26,10 +26,7 @@ export function HomePage() {
   if (listingsQuery.isLoading) {
     content = <Loader message="Loading accommodations..." />;
   } else if (listingsQuery.isError) {
-    const message = isRateLimitError(listingsQuery.error)
-      ? 'Rate limit reached. Please wait a moment and try again.'
-      : 'Could not load listings at the moment. Please retry shortly.';
-    content = <ErrorState message={message} />;
+    content = <ErrorState message={toUserErrorMessage(listingsQuery.error)} />;
   } else if (!listingsQuery.data || listingsQuery.data.length === 0) {
     content = <ErrorState title="No listings found" message="Try changing search or filters." />;
   } else {
