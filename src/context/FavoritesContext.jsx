@@ -1,21 +1,11 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
-import { Listing } from '@/types';
-import { readStorage, writeStorage } from '@/utils/storage';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { readStorage, writeStorage } from '@/utils/storage.js';
 
-interface FavoritesContextValue {
-  favoriteIds: string[];
-  favoriteListings: Listing[];
-  toggleFavorite: (listing: Listing) => void;
-  isFavorite: (id: string) => boolean;
-}
+const FavoritesContext = createContext(undefined);
 
-const FavoritesContext = createContext<FavoritesContextValue | undefined>(undefined);
-
-export function FavoritesProvider({ children }: { children: ReactNode }) {
-  const [favoriteIds, setFavoriteIds] = useState(() => readStorage<string[]>('favorites.ids', []));
-  const [favoriteMap, setFavoriteMap] = useState<Record<string, Listing>>(() =>
-    readStorage<Record<string, Listing>>('favorites.map', {})
-  );
+export function FavoritesProvider({ children }) {
+  const [favoriteIds, setFavoriteIds] = useState(() => readStorage('favorites.ids', []));
+  const [favoriteMap, setFavoriteMap] = useState(() => readStorage('favorites.map', {}));
 
   useEffect(() => {
     writeStorage('favorites.ids', favoriteIds);
@@ -25,11 +15,11 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     writeStorage('favorites.map', favoriteMap);
   }, [favoriteMap]);
 
-  const value = useMemo<FavoritesContextValue>(
+  const value = useMemo(
     () => ({
       favoriteIds,
       favoriteListings: favoriteIds.map((id) => favoriteMap[id]).filter(Boolean),
-      toggleFavorite: (listing: Listing) => {
+      toggleFavorite: (listing) => {
         setFavoriteIds((prev) => {
           const exists = prev.includes(listing.id);
           if (exists) {
@@ -44,7 +34,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
           return [...prev, listing.id];
         });
       },
-      isFavorite: (id: string) => favoriteIds.includes(id)
+      isFavorite: (id) => favoriteIds.includes(id)
     }),
     [favoriteIds, favoriteMap]
   );

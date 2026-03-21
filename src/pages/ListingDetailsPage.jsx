@@ -1,9 +1,9 @@
-ï»¿import { Link, useParams } from 'react-router-dom';
-import { BookingForm } from '@/components/forms/BookingForm';
-import { ErrorState } from '@/components/ui/ErrorState';
-import { Loader } from '@/components/ui/Loader';
-import { useFilters } from '@/context/FiltersContext';
-import { useListingDetailsQuery } from '@/hooks/useListingsQuery';
+import { Link, useParams } from 'react-router-dom';
+import { BookingForm } from '@/components/forms/BookingForm.jsx';
+import { ErrorState } from '@/components/ui/ErrorState.jsx';
+import { Loader } from '@/components/ui/Loader.jsx';
+import { useFilters } from '@/context/FiltersContext.jsx';
+import { useListingDetailsQuery } from '@/hooks/useListingsQuery.js';
 
 export function ListingDetailsPage() {
   const { id = '' } = useParams();
@@ -47,7 +47,7 @@ export function ListingDetailsPage() {
         </Link>
         <h1>{listing.title}</h1>
         <p>
-          {listing.location} Â· {listing.rating.toFixed(1)} stars Â· Hosted by {listing.hostName}
+          {listing.location} · {listing.rating.toFixed(1)} stars · Hosted by {listing.hostName}
         </p>
         <p>{listing.description}</p>
 

@@ -1,10 +1,8 @@
 import axios from 'axios';
-import { Listing, SearchFilters } from '@/types';
 
 const apiKey = import.meta.env.VITE_RAPID_API_KEY;
 
 if (!apiKey) {
-  // Fail fast so deployment/config issues are visible instead of silent request failures.
   throw new Error('Missing VITE_RAPID_API_KEY in environment variables.');
 }
 
@@ -21,12 +19,12 @@ export const api = axios.create({
 const defaultDescription =
   'A comfortable stay with curated amenities, flexible check-in, and a reliable host experience.';
 
-function toNumber(value: unknown, fallback = 0): number {
+function toNumber(value, fallback = 0) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
-function extractPrice(raw: any): number {
+function extractPrice(raw) {
   return (
     toNumber(raw?.price?.unit?.amount) ||
     toNumber(raw?.price?.amount) ||
@@ -36,9 +34,9 @@ function extractPrice(raw: any): number {
   );
 }
 
-function normalizeListing(raw: any): Listing {
+function normalizeListing(raw) {
   const imageList = (raw?.images || raw?.contextualPictures || [])
-    .map((item: any) => item?.url || item?.picture || item)
+    .map((item) => item?.url || item?.picture || item)
     .filter(Boolean);
 
   return {
@@ -58,7 +56,7 @@ function normalizeListing(raw: any): Listing {
   };
 }
 
-function parseListingsPayload(payload: any): any[] {
+function parseListingsPayload(payload) {
   const direct =
     payload?.data?.searchResults ||
     payload?.data?.homes ||
@@ -81,10 +79,10 @@ function parseListingsPayload(payload: any): any[] {
   return discoverListingCandidates(payload);
 }
 
-function discoverListingCandidates(payload: any): any[] {
+function discoverListingCandidates(payload) {
   const queue = [payload];
-  const found: any[] = [];
-  const visited = new Set<any>();
+  const found = [];
+  const visited = new Set();
   const maxNodes = 3000;
   let processed = 0;
 
@@ -128,7 +126,7 @@ function discoverListingCandidates(payload: any): any[] {
   return found;
 }
 
-export async function fetchListings(filters: SearchFilters): Promise<Listing[]> {
+export async function fetchListings(filters) {
   const response = await api.get('/searchPropertyByPlaceId', {
     params: {
       placeId: filters.placeId,
@@ -155,19 +153,19 @@ export async function fetchListings(filters: SearchFilters): Promise<Listing[]> 
   });
 }
 
-export async function fetchListingDetails(id: string, filters: SearchFilters): Promise<Listing | null> {
+export async function fetchListingDetails(id, filters) {
   const listings = await fetchListings(filters);
   return listings.find((listing) => listing.id === id) || null;
 }
 
-export function isRateLimitError(error: unknown): boolean {
+export function isRateLimitError(error) {
   if (!axios.isAxiosError(error)) {
     return false;
   }
   return error.response?.status === 429;
 }
 
-export function toUserErrorMessage(error: unknown): string {
+export function toUserErrorMessage(error) {
   if (!axios.isAxiosError(error)) {
     return 'Unexpected error occurred. Please try again.';
   }

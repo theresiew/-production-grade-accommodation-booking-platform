@@ -1,14 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactNode, useState } from 'react';
-import { AuthProvider } from './context/AuthContext';
-import { FavoritesProvider } from './context/FavoritesContext';
-import { FiltersProvider } from './context/FiltersContext';
+import { useState } from 'react';
+import { AuthProvider } from './context/AuthContext.jsx';
+import { FavoritesProvider } from './context/FavoritesContext.jsx';
+import { FiltersProvider } from './context/FiltersContext.jsx';
 
-interface AppProvidersProps {
-  children: ReactNode;
-}
-
-export function AppProviders({ children }: AppProvidersProps) {
+export function AppProviders({ children }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({

@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SidebarFilters } from '@/components/layout/SidebarFilters';
-import { ListingCard } from '@/components/listings/ListingCard';
-import { ErrorState } from '@/components/ui/ErrorState';
-import { Loader } from '@/components/ui/Loader';
-import { useFilters } from '@/context/FiltersContext';
-import { useListingsQuery } from '@/hooks/useListingsQuery';
-import { toUserErrorMessage } from '@/services/api';
+import { SidebarFilters } from '@/components/layout/SidebarFilters.jsx';
+import { ListingCard } from '@/components/listings/ListingCard.jsx';
+import { ErrorState } from '@/components/ui/ErrorState.jsx';
+import { Loader } from '@/components/ui/Loader.jsx';
+import { useFilters } from '@/context/FiltersContext.jsx';
+import { useListingsQuery } from '@/hooks/useListingsQuery.js';
+import { toUserErrorMessage } from '@/services/api.js';
 
 export function HomePage() {
   const { filters, updateFilters } = useFilters();

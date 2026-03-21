@@ -1,14 +1,9 @@
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
-import { useCreateBookingMutation } from '@/hooks/useBookings';
-import { Listing } from '@/types';
+import { useAuth } from '@/context/AuthContext.jsx';
+import { useCreateBookingMutation } from '@/hooks/useBookings.js';
 
-interface BookingFormProps {
-  listing: Listing;
-}
-
-export function BookingForm({ listing }: BookingFormProps) {
+export function BookingForm({ listing }) {
   const { isAuthenticated } = useAuth();
   const [checkin, setCheckin] = useState('');
   const [checkout, setCheckout] = useState('');
@@ -16,7 +11,7 @@ export function BookingForm({ listing }: BookingFormProps) {
   const [validationError, setValidationError] = useState('');
   const createBooking = useCreateBookingMutation();
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     if (!isAuthenticated) {
       setValidationError('Please login before creating a booking.');

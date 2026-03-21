@@ -1,8 +1,8 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
-import { useFilters } from '@/context/FiltersContext';
-import { UserProfileCard } from '@/components/user/UserProfileCard';
+import { useAuth } from '@/context/AuthContext.jsx';
+import { useFilters } from '@/context/FiltersContext.jsx';
+import { UserProfileCard } from '@/components/user/UserProfileCard.jsx';
 
 export function Navbar() {
   const { isAuthenticated, logout } = useAuth();
@@ -20,7 +20,7 @@ export function Navbar() {
     }
   }, [searchParams, filters.query, updateFilters]);
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event) => {
     event.preventDefault();
     const next = new URLSearchParams(searchParams);
     if (query) {

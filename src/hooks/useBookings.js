@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useBookingStore } from '@/store/bookingStore';
-import { Booking, BookingInput } from '@/types';
+import { useBookingStore } from '@/store/bookingStore.js';
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export function useBookingsQuery() {
   return useQuery({
@@ -20,20 +19,20 @@ export function useCreateBookingMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (input: BookingInput) => {
+    mutationFn: async (input) => {
       await delay(300);
       return useBookingStore.getState().addBooking(input);
     },
     onMutate: async (input) => {
       await queryClient.cancelQueries({ queryKey: ['bookings'] });
-      const previous = queryClient.getQueryData<Booking[]>(['bookings']) || [];
-      const optimistic: Booking = {
+      const previous = queryClient.getQueryData(['bookings']) || [];
+      const optimistic = {
         ...input,
         id: `temp-${Date.now()}`,
         status: 'confirmed',
         createdAt: new Date().toISOString()
       };
-      queryClient.setQueryData<Booking[]>(['bookings'], [optimistic, ...previous]);
+      queryClient.setQueryData(['bookings'], [optimistic, ...previous]);
       return { previous };
     },
     onError: (_error, _vars, context) => {
@@ -51,19 +50,17 @@ export function useCancelBookingMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (id) => {
       await delay(250);
       useBookingStore.getState().cancelBooking(id);
       return id;
     },
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: ['bookings'] });
-      const previous = queryClient.getQueryData<Booking[]>(['bookings']) || [];
-      queryClient.setQueryData<Booking[]>(
+      const previous = queryClient.getQueryData(['bookings']) || [];
+      queryClient.setQueryData(
         ['bookings'],
-        previous.map((booking) =>
-          booking.id === id ? { ...booking, status: 'cancelled' } : booking
-        )
+        previous.map((booking) => (booking.id === id ? { ...booking, status: 'cancelled' } : booking))
       );
       return { previous };
     },

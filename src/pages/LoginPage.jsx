@@ -1,6 +1,6 @@
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext.jsx';
 
 export function LoginPage() {
   const [username, setUsername] = useState('');
@@ -8,9 +8,9 @@ export function LoginPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || '/';
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event) => {
     event.preventDefault();
     if (!username.trim()) {
       return;

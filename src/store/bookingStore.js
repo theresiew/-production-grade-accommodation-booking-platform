@@ -1,19 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Booking, BookingInput } from '@/types';
 
-interface BookingState {
-  bookings: Booking[];
-  addBooking: (input: BookingInput) => Booking;
-  cancelBooking: (id: string) => void;
-}
-
-export const useBookingStore = create<BookingState>()(
+export const useBookingStore = create(
   persist(
     (set) => ({
       bookings: [],
       addBooking: (input) => {
-        const booking: Booking = {
+        const booking = {
           ...input,
           id: crypto.randomUUID(),
           status: 'confirmed',

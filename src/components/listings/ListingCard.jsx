@@ -1,12 +1,7 @@
 import { Link } from 'react-router-dom';
-import { useFavorites } from '@/context/FavoritesContext';
-import { Listing } from '@/types';
+import { useFavorites } from '@/context/FavoritesContext.jsx';
 
-interface ListingCardProps {
-  listing: Listing;
-}
-
-export function ListingCard({ listing }: ListingCardProps) {
+export function ListingCard({ listing }) {
   const { isFavorite, toggleFavorite } = useFavorites();
 
   return (

@@ -1,4 +1,4 @@
-export function Loader({ message = 'Loading data...' }: { message?: string }) {
+export function Loader({ message = 'Loading data...' }) {
   return (
     <div className="status-card" role="status" aria-live="polite">
       <div className="spinner" />

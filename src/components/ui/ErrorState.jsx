@@ -1,11 +1,4 @@
-interface ErrorStateProps {
-  title?: string;
-  message: string;
-  actionLabel?: string;
-  onAction?: () => void;
-}
-
-export function ErrorState({ title = 'Something went wrong', message, actionLabel, onAction }: ErrorStateProps) {
+export function ErrorState({ title = 'Something went wrong', message, actionLabel, onAction }) {
   return (
     <div className="status-card error">
       <h3>{title}</h3>

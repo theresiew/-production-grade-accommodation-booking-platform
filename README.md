@@ -4,7 +4,7 @@ Production-grade accommodation booking platform built with React + Vite + TypeSc
 
 ## Features
 - API-driven listings feed using Airbnb RapidAPI endpoint.
-- Centralized Axios client in `src/services/api.ts`.
+- Centralized Axios client in `src/services/api.js`.
 - TanStack Query server state (`useQuery`, `queryKey`, `staleTime`, `cacheTime`, invalidation).
 - Context API global state for filters and favorites.
 - Zustand store for complex booking logic with persistence.
@@ -29,42 +29,40 @@ src/
     ui/
     user/
   context/
-    AuthContext.tsx
-    FavoritesContext.tsx
-    FiltersContext.tsx
+    AuthContext.jsx
+    FavoritesContext.jsx
+    FiltersContext.jsx
   hooks/
-    useBookings.ts
-    useListingsQuery.ts
+    useBookings.js
+    useListingsQuery.js
   pages/
-    HomePage.tsx
-    ListingDetailsPage.tsx
-    BookingsPage.tsx
-    FavoritesPage.tsx
-    LoginPage.tsx
+    HomePage.jsx
+    ListingDetailsPage.jsx
+    BookingsPage.jsx
+    FavoritesPage.jsx
+    LoginPage.jsx
   routes/
-    AppRoutes.tsx
-    ProtectedRoute.tsx
+    AppRoutes.jsx
+    ProtectedRoute.jsx
   services/
-    api.ts
+    api.js
   store/
-    bookingStore.ts
-  types/
-    index.ts
+    bookingStore.js
   utils/
-    storage.ts
+    storage.js
 ```
 
 ## API Integration
 Mandatory endpoint used:
 - `https://airbnb19.p.rapidapi.com/api/v2/searchPropertyByPlaceId`
 
-Headers configured centrally in `src/services/api.ts`:
+Headers configured centrally in `src/services/api.js`:
 - `x-rapidapi-key` from environment variable
 - `x-rapidapi-host: airbnb19.p.rapidapi.com`
 - `Content-Type: application/json`
 
 ### Response Normalization
-`src/services/api.ts` normalizes nested API payloads into a consistent `Listing` model and applies client-side filtering.
+`src/services/api.js` normalizes nested API payloads into a consistent `Listing` model and applies client-side filtering.
 
 ## State Management Breakdown
 - Local state: form fields, UI interactions, controlled search input.
@@ -116,3 +114,4 @@ Live URL: _Add deployed URL here after deployment._
 
 ## Commit Guidance
 This assignment expects a minimum of 10 meaningful commits. Use clear commit messages grouped by feature.
+

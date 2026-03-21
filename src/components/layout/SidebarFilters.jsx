@@ -1,5 +1,4 @@
-import { ChangeEvent } from 'react';
-import { useFilters } from '@/context/FiltersContext';
+import { useFilters } from '@/context/FiltersContext.jsx';
 
 const locations = [
   { label: 'Chicago (sample)', placeId: 'ChIJ7cv00DwsDogRAMDACa2m4K8' },
@@ -11,7 +10,7 @@ const locations = [
 export function SidebarFilters() {
   const { filters, updateFilters, resetFilters } = useFilters();
 
-  const onLocation = (event: ChangeEvent<HTMLSelectElement>) => {
+  const onLocation = (event) => {
     const placeId = event.target.value;
     const selected = locations.find((item) => item.placeId === placeId);
     updateFilters({ placeId, locationLabel: selected?.label || 'Custom location' });

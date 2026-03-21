@@ -1,6 +1,6 @@
-﻿import { useCancelBookingMutation, useBookingsQuery } from '@/hooks/useBookings';
-import { ErrorState } from '@/components/ui/ErrorState';
-import { Loader } from '@/components/ui/Loader';
+import { useCancelBookingMutation, useBookingsQuery } from '@/hooks/useBookings.js';
+import { ErrorState } from '@/components/ui/ErrorState.jsx';
+import { Loader } from '@/components/ui/Loader.jsx';
 
 export function BookingsPage() {
   const bookingsQuery = useBookingsQuery();
@@ -34,7 +34,7 @@ export function BookingsPage() {
           <article className="booking-card" key={booking.id}>
             <h3>{booking.listingTitle}</h3>
             <p>
-              {booking.checkin} to {booking.checkout} · {booking.guests} guests
+              {booking.checkin} to {booking.checkout} � {booking.guests} guests
             </p>
             <p>Status: {booking.status}</p>
             <button

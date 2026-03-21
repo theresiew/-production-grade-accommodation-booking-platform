@@ -1,6 +1,6 @@
-import { ListingCard } from '@/components/listings/ListingCard';
-import { ErrorState } from '@/components/ui/ErrorState';
-import { useFavorites } from '@/context/FavoritesContext';
+import { ListingCard } from '@/components/listings/ListingCard.jsx';
+import { ErrorState } from '@/components/ui/ErrorState.jsx';
+import { useFavorites } from '@/context/FavoritesContext.jsx';
 
 export function FavoritesPage() {
   const { favoriteIds, favoriteListings } = useFavorites();
