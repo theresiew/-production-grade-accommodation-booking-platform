@@ -59,14 +59,73 @@ function normalizeListing(raw: any): Listing {
 }
 
 function parseListingsPayload(payload: any): any[] {
-  return (
+  const direct =
     payload?.data?.searchResults ||
     payload?.data?.homes ||
     payload?.data?.results ||
+    payload?.data?.items ||
+    payload?.data?.listings ||
+    payload?.data?.searchResults?.results ||
+    payload?.data?.searchResults?.searchResults ||
+    payload?.data?.searchResults?.listings ||
+    payload?.data?.presentation?.staysSearch?.results?.searchResults ||
+    payload?.data?.presentation?.explore?.sections?.[0]?.items ||
     payload?.results ||
     payload?.homes ||
-    []
-  );
+    [];
+
+  if (Array.isArray(direct) && direct.length > 0) {
+    return direct;
+  }
+
+  return discoverListingCandidates(payload);
+}
+
+function discoverListingCandidates(payload: any): any[] {
+  const queue = [payload];
+  const found: any[] = [];
+  const visited = new Set<any>();
+  const maxNodes = 3000;
+  let processed = 0;
+
+  while (queue.length && processed < maxNodes) {
+    const current = queue.shift();
+    processed += 1;
+
+    if (!current || typeof current !== 'object' || visited.has(current)) {
+      continue;
+    }
+    visited.add(current);
+
+    if (Array.isArray(current)) {
+      for (const item of current) {
+        queue.push(item);
+      }
+      continue;
+    }
+
+    const hasId = Boolean(current.id || current.listing?.id || current.propertyId);
+    const hasTitle = Boolean(current.name || current.title || current.listing?.name);
+    const hasPrice = Boolean(
+      current.price ||
+        current.pricingQuote ||
+        current.structuredDisplayPrice ||
+        current.priceQuote ||
+        current.formattedPrice
+    );
+
+    if (hasId && hasTitle && hasPrice) {
+      found.push(current);
+    }
+
+    for (const value of Object.values(current)) {
+      if (value && typeof value === 'object') {
+        queue.push(value);
+      }
+    }
+  }
+
+  return found;
 }
 
 export async function fetchListings(filters: SearchFilters): Promise<Listing[]> {
