@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { SearchFilters } from '@/types';
+import { readStorage, writeStorage } from '@/utils/storage';
 
 interface FiltersContextValue {
   filters: SearchFilters;
@@ -17,7 +18,13 @@ const defaultFilters: SearchFilters = {
 const FiltersContext = createContext<FiltersContextValue | undefined>(undefined);
 
 export function FiltersProvider({ children }: { children: ReactNode }) {
-  const [filters, setFilters] = useState<SearchFilters>(defaultFilters);
+  const [filters, setFilters] = useState<SearchFilters>(() =>
+    readStorage<SearchFilters>('filters.state', defaultFilters)
+  );
+
+  useEffect(() => {
+    writeStorage('filters.state', filters);
+  }, [filters]);
 
   const value = useMemo<FiltersContextValue>(
     () => ({
