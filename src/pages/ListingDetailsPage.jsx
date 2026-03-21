@@ -36,22 +36,22 @@ export function ListingDetailsPage() {
   const listing = detailsQuery.data;
 
   return (
-    <div className="page page-details">
-      <div className="details-media">
-        <img src={listing.image} alt={listing.title} />
+    <div className="grid gap-4 xl:grid-cols-[2fr_2fr_1.2fr]">
+      <div>
+        <img className="min-h-[360px] w-full rounded-2xl object-cover" src={listing.image} alt={listing.title} />
       </div>
 
-      <div className="details-main">
-        <Link to="/" className="back-link">
+      <div className="rounded-2xl border border-[#e8dfd0] bg-[#fffdf8] p-4 shadow-[0_8px_24px_rgba(40,44,52,0.06)]">
+        <Link to="/" className="font-semibold text-[#b0413e]">
           Back to feed
         </Link>
-        <h1>{listing.title}</h1>
-        <p>
-          {listing.location} · {listing.rating.toFixed(1)} stars · Hosted by {listing.hostName}
+        <h1 className="mb-3 mt-4 text-3xl font-semibold">{listing.title}</h1>
+        <p className="m-0 text-[#5f6c7b]">
+          {listing.location} Â· {listing.rating.toFixed(1)} stars Â· Hosted by {listing.hostName}
         </p>
-        <p>{listing.description}</p>
+        <p className="mb-0 mt-4 leading-7">{listing.description}</p>
 
-        <ul className="details-meta">
+        <ul className="mt-4 grid list-none gap-1.5 p-0">
           <li>{listing.guests} guests</li>
           <li>{listing.bedrooms} bedrooms</li>
           <li>{listing.bathrooms} bathrooms</li>

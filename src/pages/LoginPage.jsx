@@ -20,11 +20,14 @@ export function LoginPage() {
   };
 
   return (
-    <div className="page login-page">
-      <form className="login-card" onSubmit={onSubmit}>
-        <h1>Login</h1>
-        <p>Sign in to manage your bookings dashboard.</p>
-        <label>
+    <div className="grid min-h-[72vh] place-items-center">
+      <form
+        className="flex w-[min(420px,95%)] flex-col gap-3 rounded-2xl border border-[#e8dfd0] bg-[#fffdf8] p-4 shadow-[0_8px_24px_rgba(40,44,52,0.06)]"
+        onSubmit={onSubmit}
+      >
+        <h1 className="m-0 text-3xl font-semibold">Login</h1>
+        <p className="m-0 text-[#5f6c7b]">Sign in to manage your bookings dashboard.</p>
+        <label className="flex flex-col gap-1.5 text-[0.92rem]">
           Username
           <input
             type="text"

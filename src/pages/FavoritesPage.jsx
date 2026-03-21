@@ -10,9 +10,9 @@ export function FavoritesPage() {
   }
 
   return (
-    <div className="page simple-page">
-      <h1>Saved Favorites</h1>
-      <section className="listing-grid">
+    <div className="mx-auto max-w-[1000px]">
+      <h1 className="mb-5 mt-0 text-3xl font-semibold">Saved Favorites</h1>
+      <section className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
         {favoriteListings.map((listing) => (
           <ListingCard key={listing.id} listing={listing} />
         ))}

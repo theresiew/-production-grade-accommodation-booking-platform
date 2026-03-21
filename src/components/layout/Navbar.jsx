@@ -33,13 +33,16 @@ export function Navbar() {
   };
 
   return (
-    <header className="navbar">
-      <div className="navbar-brand">
-        <Link to="/">AirStay</Link>
+    <header className="sticky top-0 z-20 grid grid-cols-1 items-center gap-3 border-b border-[#e8dfd0] bg-[rgba(255,253,248,0.92)] px-5 py-4 backdrop-blur md:grid-cols-[160px_minmax(180px,1fr)_auto]">
+      <div>
+        <Link to="/" className="text-xl font-extrabold text-[#b0413e]">
+          AirStay
+        </Link>
       </div>
 
-      <form className="navbar-search" onSubmit={onSubmit}>
+      <form className="flex gap-2" onSubmit={onSubmit}>
         <input
+          className="min-w-0 flex-1"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search by title or host"
@@ -48,18 +51,26 @@ export function Navbar() {
         <button type="submit">Search</button>
       </form>
 
-      <nav className="navbar-links">
-        <Link to="/favorites">Favorites</Link>
-        <Link to="/bookings">Bookings</Link>
+      <nav className="flex flex-wrap items-center gap-2.5">
+        <Link to="/favorites" className="text-sm font-medium hover:text-[#b0413e]">
+          Favorites
+        </Link>
+        <Link to="/bookings" className="text-sm font-medium hover:text-[#b0413e]">
+          Bookings
+        </Link>
         {isAuthenticated ? (
           <>
             <UserProfileCard />
-            <button onClick={logout} className="btn-link" type="button">
+            <button
+              onClick={logout}
+              className="border-[#e8dfd0] bg-transparent text-[#1f2933]"
+              type="button"
+            >
               Logout
             </button>
           </>
         ) : (
-          <Link to="/login" state={{ from: location }}>
+          <Link to="/login" state={{ from: location }} className="text-sm font-medium hover:text-[#b0413e]">
             Login
           </Link>
         )}

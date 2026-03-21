@@ -2,9 +2,9 @@ import { Navbar } from './Navbar.jsx';
 
 export function AppLayout({ children }) {
   return (
-    <div className="app-shell">
+    <div className="min-h-screen">
       <Navbar />
-      <main className="app-main">{children}</main>
+      <main className="p-4">{children}</main>
     </div>
   );
 }

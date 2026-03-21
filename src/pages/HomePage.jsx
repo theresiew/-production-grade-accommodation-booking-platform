@@ -37,7 +37,7 @@ export function HomePage() {
     content = <ErrorState title="No listings found" message="Try changing search or filters." />;
   } else {
     content = (
-      <section className="listing-grid" aria-live="polite">
+      <section className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4" aria-live="polite">
         {listingsQuery.data.map((listing) => (
           <ListingCard key={listing.id} listing={listing} />
         ))}
@@ -46,12 +46,12 @@ export function HomePage() {
   }
 
   return (
-    <div className="page page-home">
+    <div className="grid gap-4 lg:grid-cols-[280px_1fr]">
       <SidebarFilters />
-      <section className="content-panel">
-        <header className="content-header">
-          <h1>Stays in {filters.locationLabel}</h1>
-          <p>{listingsQuery.data?.length ?? 0} properties</p>
+      <section className="rounded-2xl border border-[#e8dfd0] bg-[#fffdf8] p-4 shadow-[0_8px_24px_rgba(40,44,52,0.06)]">
+        <header className="flex flex-col justify-between gap-2 md:flex-row md:items-baseline">
+          <h1 className="m-0 text-3xl font-semibold">Stays in {filters.locationLabel}</h1>
+          <p className="m-0 text-[#5f6c7b]">{listingsQuery.data?.length ?? 0} properties</p>
         </header>
         {content}
       </section>

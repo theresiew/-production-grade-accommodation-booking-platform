@@ -41,15 +41,18 @@ export function BookingForm({ listing }) {
   };
 
   return (
-    <form className="booking-form" onSubmit={onSubmit}>
-      <h3>Book this stay</h3>
+    <form
+      className="flex flex-col gap-3 rounded-2xl border border-[#e8dfd0] bg-[#fffdf8] p-4 shadow-[0_8px_24px_rgba(40,44,52,0.06)]"
+      onSubmit={onSubmit}
+    >
+      <h3 className="m-0 text-xl font-semibold">Book this stay</h3>
 
-      <label>
+      <label className="flex flex-col gap-1.5 text-[0.92rem]">
         Check-in
         <input type="date" value={checkin} onChange={(event) => setCheckin(event.target.value)} required />
       </label>
 
-      <label>
+      <label className="flex flex-col gap-1.5 text-[0.92rem]">
         Check-out
         <input
           type="date"
@@ -60,7 +63,7 @@ export function BookingForm({ listing }) {
         />
       </label>
 
-      <label>
+      <label className="flex flex-col gap-1.5 text-[0.92rem]">
         Guests
         <input
           type="number"
@@ -75,14 +78,17 @@ export function BookingForm({ listing }) {
         {createBooking.isPending ? 'Booking...' : 'Confirm Booking'}
       </button>
       {!isAuthenticated ? (
-        <p className="error-text">
-          You must be logged in. <Link to="/login">Go to login</Link>
+        <p className="m-0 text-[#9e2b25]">
+          You must be logged in.{' '}
+          <Link className="font-medium underline" to="/login">
+            Go to login
+          </Link>
         </p>
       ) : null}
 
-      {createBooking.isSuccess ? <p className="success-text">Booking confirmed.</p> : null}
-      {validationError ? <p className="error-text">{validationError}</p> : null}
-      {createBooking.isError ? <p className="error-text">Could not create booking. Try again.</p> : null}
+      {createBooking.isSuccess ? <p className="m-0 text-[#1f7a4d]">Booking confirmed.</p> : null}
+      {validationError ? <p className="m-0 text-[#9e2b25]">{validationError}</p> : null}
+      {createBooking.isError ? <p className="m-0 text-[#9e2b25]">Could not create booking. Try again.</p> : null}
     </form>
   );
 }
