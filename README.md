@@ -108,6 +108,10 @@ npm run dev
 3. Add `VITE_RAPID_API_KEY` in platform environment variables.
 4. Deploy.
 
+Routing support files included:
+- `vercel.json` rewrite to `index.html` for client-side routes.
+- `public/_redirects` fallback rule for Netlify SPA routing.
+
 Live URL: _Add deployed URL here after deployment._
 
 ## Commit Guidance
