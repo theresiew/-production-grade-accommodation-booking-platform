@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+ï»¿import { Link, useParams } from 'react-router-dom';
 import { BookingForm } from '@/components/forms/BookingForm';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { Loader } from '@/components/ui/Loader';
@@ -15,7 +15,13 @@ export function ListingDetailsPage() {
   }
 
   if (detailsQuery.isError) {
-    return <ErrorState message="Could not load this property. Return to listings and try again." />;
+    return (
+      <ErrorState
+        message="Could not load this property. Return to listings and try again."
+        actionLabel="Retry"
+        onAction={() => detailsQuery.refetch()}
+      />
+    );
   }
 
   if (!detailsQuery.data) {
@@ -41,7 +47,7 @@ export function ListingDetailsPage() {
         </Link>
         <h1>{listing.title}</h1>
         <p>
-          {listing.location} · {listing.rating.toFixed(1)} stars · Hosted by {listing.hostName}
+          {listing.location} Â· {listing.rating.toFixed(1)} stars Â· Hosted by {listing.hostName}
         </p>
         <p>{listing.description}</p>
 

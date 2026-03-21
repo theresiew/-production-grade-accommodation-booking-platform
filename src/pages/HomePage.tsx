@@ -26,7 +26,13 @@ export function HomePage() {
   if (listingsQuery.isLoading) {
     content = <Loader message="Loading accommodations..." />;
   } else if (listingsQuery.isError) {
-    content = <ErrorState message={toUserErrorMessage(listingsQuery.error)} />;
+    content = (
+      <ErrorState
+        message={toUserErrorMessage(listingsQuery.error)}
+        actionLabel="Retry"
+        onAction={() => listingsQuery.refetch()}
+      />
+    );
   } else if (!listingsQuery.data || listingsQuery.data.length === 0) {
     content = <ErrorState title="No listings found" message="Try changing search or filters." />;
   } else {

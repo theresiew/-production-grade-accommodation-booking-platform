@@ -1,4 +1,4 @@
-import { useCancelBookingMutation, useBookingsQuery } from '@/hooks/useBookings';
+﻿import { useCancelBookingMutation, useBookingsQuery } from '@/hooks/useBookings';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { Loader } from '@/components/ui/Loader';
 
@@ -11,7 +11,13 @@ export function BookingsPage() {
   }
 
   if (bookingsQuery.isError) {
-    return <ErrorState message="Could not fetch bookings. Please refresh and try again." />;
+    return (
+      <ErrorState
+        message="Could not fetch bookings. Please refresh and try again."
+        actionLabel="Retry"
+        onAction={() => bookingsQuery.refetch()}
+      />
+    );
   }
 
   const bookings = bookingsQuery.data || [];
@@ -28,7 +34,7 @@ export function BookingsPage() {
           <article className="booking-card" key={booking.id}>
             <h3>{booking.listingTitle}</h3>
             <p>
-              {booking.checkin} to {booking.checkout} � {booking.guests} guests
+              {booking.checkin} to {booking.checkout} · {booking.guests} guests
             </p>
             <p>Status: {booking.status}</p>
             <button
