@@ -1,4 +1,6 @@
 import { FormEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import { useCreateBookingMutation } from '@/hooks/useBookings';
 import { Listing } from '@/types';
 
@@ -7,6 +9,7 @@ interface BookingFormProps {
 }
 
 export function BookingForm({ listing }: BookingFormProps) {
+  const { isAuthenticated } = useAuth();
   const [checkin, setCheckin] = useState('');
   const [checkout, setCheckout] = useState('');
   const [guests, setGuests] = useState(1);
@@ -15,6 +18,10 @@ export function BookingForm({ listing }: BookingFormProps) {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!isAuthenticated) {
+      setValidationError('Please login before creating a booking.');
+      return;
+    }
     if (!checkin || !checkout) {
       setValidationError('Please select both check-in and check-out dates.');
       return;
@@ -72,6 +79,11 @@ export function BookingForm({ listing }: BookingFormProps) {
       <button type="submit" disabled={createBooking.isPending}>
         {createBooking.isPending ? 'Booking...' : 'Confirm Booking'}
       </button>
+      {!isAuthenticated ? (
+        <p className="error-text">
+          You must be logged in. <Link to="/login">Go to login</Link>
+        </p>
+      ) : null}
 
       {createBooking.isSuccess ? <p className="success-text">Booking confirmed.</p> : null}
       {validationError ? <p className="error-text">{validationError}</p> : null}
