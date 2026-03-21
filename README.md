@@ -110,7 +110,7 @@ Routing support files included:
 - `vercel.json` rewrite to `index.html` for client-side routes.
 - `public/_redirects` fallback rule for Netlify SPA routing.
 
-Live URL: _Add deployed URL here after deployment._
+Live URL: https://production-grade-accommodation-booking-platform-4amkahr18.vercel.app
 
 ## Commit Guidance
 This assignment expects a minimum of 10 meaningful commits. Use clear commit messages grouped by feature.
