@@ -9,8 +9,8 @@ interface FiltersContextValue {
 }
 
 const defaultFilters: SearchFilters = {
-  placeId: 'ChIJN1t_tDeuEmsRUsoyG83frY4',
-  locationLabel: 'Sydney',
+  placeId: 'ChIJ7cv00DwsDogRAMDACa2m4K8',
+  locationLabel: 'Chicago',
   minRating: 0,
   query: ''
 };

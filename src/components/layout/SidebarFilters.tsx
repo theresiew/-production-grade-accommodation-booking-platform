@@ -2,10 +2,10 @@ import { ChangeEvent } from 'react';
 import { useFilters } from '@/context/FiltersContext';
 
 const locations = [
-  { label: 'Sydney', placeId: 'ChIJN1t_tDeuEmsRUsoyG83frY4' },
+  { label: 'Chicago (sample)', placeId: 'ChIJ7cv00DwsDogRAMDACa2m4K8' },
   { label: 'New York', placeId: 'ChIJOwg_06VPwokRYv534QaPC8g' },
-  { label: 'London', placeId: 'ChIJdd4hrwug2EcRmSrV3Vo6llI' },
-  { label: 'Paris', placeId: 'ChIJD7fiBh9u5kcRYJSMaMOCCwQ' }
+  { label: 'Sydney', placeId: 'ChIJN1t_tDeuEmsRUsoyG83frY4' },
+  { label: 'London', placeId: 'ChIJdd4hrwug2EcRmSrV3Vo6llI' }
 ];
 
 export function SidebarFilters() {
