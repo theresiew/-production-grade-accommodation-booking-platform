@@ -1,117 +1,16 @@
-# AirStay Booking Platform
+# React + Vite
 
-Production-grade accommodation booking platform built with React + Vite + TypeScript.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Features
-- API-driven listings feed using Airbnb RapidAPI endpoint.
-- Centralized Axios client in `src/services/api.js`.
-- TanStack Query server state (`useQuery`, `queryKey`, `staleTime`, `cacheTime`, invalidation).
-- Context API global state for filters and favorites.
-- Zustand store for complex booking logic with persistence.
-- Protected route for bookings dashboard.
-- Listing details, favorites, booking creation/cancellation, and login flow.
-- Responsive UI for mobile, tablet, and desktop.
+Currently, two official plugins are available:
 
-## Tech Stack
-- React 18 + Vite + TypeScript
-- Axios
-- TanStack Query
-- Zustand
-- React Router DOM
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Project Structure
-```text
-src/
-  components/
-    forms/
-    layout/
-    listings/
-    ui/
-    user/
-  context/
-    AuthContext.jsx
-    FavoritesContext.jsx
-    FiltersContext.jsx
-  hooks/
-    useBookings.js
-    useListingsQuery.js
-  pages/
-    HomePage.jsx
-    ListingDetailsPage.jsx
-    BookingsPage.jsx
-    FavoritesPage.jsx
-    LoginPage.jsx
-  routes/
-    AppRoutes.jsx
-    ProtectedRoute.jsx
-  services/
-    api.js
-  store/
-    bookingStore.js
-  utils/
-    storage.js
-```
+## React Compiler
 
-## API Integration
-Mandatory endpoint used:
-- `https://airbnb19.p.rapidapi.com/api/v2/searchPropertyByPlaceId`
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-Headers configured centrally in `src/services/api.js`:
-- `x-rapidapi-key` from environment variable
-- `x-rapidapi-host: airbnb19.p.rapidapi.com`
-- `Content-Type: application/json`
+## Expanding the ESLint configuration
 
-### Response Normalization
-`src/services/api.js` normalizes nested API payloads into a consistent `Listing` model and applies client-side filtering.
-
-## State Management Breakdown
-- Local state: form fields, UI interactions, controlled search input.
-- Global state (Context API): filters and favorites.
-- Advanced shared state (Zustand): booking creation/cancellation logic.
-- Server state (TanStack Query): listings, listing details, booking query/mutations.
-
-## Setup
-1. Install dependencies:
-```bash
-npm install
-```
-2. Create `.env` from `.env.example`:
-```bash
-cp .env.example .env
-```
-3. Set key:
-```env
-VITE_RAPID_API_KEY=your_rapidapi_key
-```
-4. Run dev server:
-```bash
-npm run dev
-```
-
-## Required Routes
-- `/` listings feed
-- `/listing/:id` listing details
-- `/bookings` protected bookings dashboard
-- `/favorites` saved listings
-- `/login` authentication
-
-## Caching Behavior
-- Listings use stable query keys based on filters.
-- `staleTime` and `cacheTime` are configured to avoid unnecessary re-fetches.
-- Query invalidation refreshes booking dashboards after booking/cancel actions.
-
-## Deployment (Vercel/Netlify)
-1. Push repository.
-2. Import project into Vercel or Netlify.
-3. Add `VITE_RAPID_API_KEY` in platform environment variables.
-4. Deploy.
-
-Routing support files included:
-- `vercel.json` rewrite to `index.html` for client-side routes.
-- `public/_redirects` fallback rule for Netlify SPA routing.
-
-Live URL: https://production-grade-accommodation-booking-platform-4amkahr18.vercel.app
-
-## Commit Guidance
-This assignment expects a minimum of 10 meaningful commits. Use clear commit messages grouped by feature.
-
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

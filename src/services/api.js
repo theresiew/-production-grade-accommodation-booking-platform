@@ -1,182 +1,59 @@
-import axios from 'axios';
+import axios from 'axios'
 
-const apiKey = import.meta.env.VITE_RAPID_API_KEY;
-
-export const api = axios.create({
-  baseURL: 'https://airbnb19.p.rapidapi.com/api/v2',
-  timeout: 10000,
+const api = axios.create({
+  baseURL: 'https://airbnb19.p.rapidapi.com',
   headers: {
-    'Content-Type': 'application/json',
+    'x-rapidapi-key': import.meta.env.VITE_RAPID_API_KEY,
     'x-rapidapi-host': 'airbnb19.p.rapidapi.com',
-    'x-rapidapi-key': apiKey
-  }
-});
+    'Content-Type': 'application/json',
+  },
+})
 
-const defaultDescription =
-  'A comfortable stay with curated amenities, flexible check-in, and a reliable host experience.';
-
-function toNumber(value, fallback = 0) {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : fallback;
-}
-
-function extractPrice(raw) {
-  return (
-    toNumber(raw?.price?.unit?.amount) ||
-    toNumber(raw?.price?.amount) ||
-    toNumber(raw?.pricingQuote?.rate?.amount) ||
-    toNumber(raw?.structuredDisplayPrice?.primaryLine?.price) ||
-    0
-  );
-}
-
-function normalizeListing(raw) {
-  const imageList = (raw?.images || raw?.contextualPictures || [])
-    .map((item) => item?.url || item?.picture || item)
-    .filter(Boolean);
-
-  return {
-    id: String(raw?.id || raw?.listing?.id || raw?.propertyId || crypto.randomUUID()),
-    title: raw?.name || raw?.title || raw?.listing?.name || 'Untitled stay',
-    location: raw?.location?.city || raw?.city || raw?.localizedCityName || 'Unknown location',
-    rating: toNumber(raw?.avgRatingA11yLabel?.split(' ')[0] || raw?.rating || raw?.avgRatingLocalized),
-    pricePerNight: extractPrice(raw),
-    currency: raw?.price?.unit?.currencyCode || raw?.currency || 'USD',
-    image: imageList[0] || 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1280',
-    images: imageList,
-    description: raw?.description || raw?.summary || raw?.caption || defaultDescription,
-    guests: toNumber(raw?.personCapacity || raw?.guests || 2, 2),
-    bedrooms: toNumber(raw?.bedroomCount || raw?.bedrooms || 1, 1),
-    bathrooms: toNumber(raw?.bathroomCount || raw?.bathrooms || 1, 1),
-    hostName: raw?.host?.name || raw?.primaryHost?.firstName || 'AirStay Host'
-  };
-}
-
-function parseListingsPayload(payload) {
-  const direct =
-    payload?.data?.searchResults ||
-    payload?.data?.homes ||
-    payload?.data?.results ||
-    payload?.data?.items ||
-    payload?.data?.listings ||
-    payload?.data?.searchResults?.results ||
-    payload?.data?.searchResults?.searchResults ||
-    payload?.data?.searchResults?.listings ||
-    payload?.data?.presentation?.staysSearch?.results?.searchResults ||
-    payload?.data?.presentation?.explore?.sections?.[0]?.items ||
-    payload?.results ||
-    payload?.homes ||
-    [];
-
-  if (Array.isArray(direct) && direct.length > 0) {
-    return direct;
-  }
-
-  return discoverListingCandidates(payload);
-}
-
-function discoverListingCandidates(payload) {
-  const queue = [payload];
-  const found = [];
-  const visited = new Set();
-  const maxNodes = 3000;
-  let processed = 0;
-
-  while (queue.length && processed < maxNodes) {
-    const current = queue.shift();
-    processed += 1;
-
-    if (!current || typeof current !== 'object' || visited.has(current)) {
-      continue;
-    }
-    visited.add(current);
-
-    if (Array.isArray(current)) {
-      for (const item of current) {
-        queue.push(item);
-      }
-      continue;
-    }
-
-    const hasId = Boolean(current.id || current.listing?.id || current.propertyId);
-    const hasTitle = Boolean(current.name || current.title || current.listing?.name);
-    const hasPrice = Boolean(
-      current.price ||
-        current.pricingQuote ||
-        current.structuredDisplayPrice ||
-        current.priceQuote ||
-        current.formattedPrice
-    );
-
-    if (hasId && hasTitle && hasPrice) {
-      found.push(current);
-    }
-
-    for (const value of Object.values(current)) {
-      if (value && typeof value === 'object') {
-        queue.push(value);
-      }
-    }
-  }
-
-  return found;
-}
-
-export async function fetchListings(filters) {
-  if (!apiKey) {
-    throw new Error('Missing VITE_RAPID_API_KEY. Add it in Vercel environment variables.');
-  }
-
-  const response = await api.get('/searchPropertyByPlaceId', {
+export const searchProperties = async (placeId = 'ChIJ7cv00DwsDogRAMDACa2m4K8') => {
+  const response = await api.get('/api/v2/searchPropertyByPlaceId', {
     params: {
-      placeId: filters.placeId,
-      checkin: filters.checkin,
-      checkout: filters.checkout,
-      adults: 2,
-      children: 0,
-      infants: 0,
-      pets: 0,
-      page: 1,
-      currency: 'USD'
+      placeId,
+      adults: 1,
+      guestFavorite: false,
+      ib: false,
+      currency: 'USD',
+    },
+  })
+
+  const rawList = response.data?.data?.list || []
+
+  const listings = rawList.map((item) => {
+    const l = item?.listing || {}
+    const pictures = item?.contextualPictures || []
+    const price = item?.structuredDisplayPrice?.primaryLine?.discountedPrice
+  || item?.structuredDisplayPrice?.primaryLine?.originalPrice
+  || item?.structuredDisplayPrice?.primaryLine?.price
+  || item?.pricingQuote?.structuredStayDisplayPrice?.primaryLine?.price
+  || 'N/A'
+    const ratingRaw = item?.avgRatingLocalized || ''
+    const ratingMatch = ratingRaw.match(/[\d.]+/)
+    const avgRating = ratingMatch ? parseFloat(ratingMatch[0]) : null
+
+    const reviewMatch = ratingRaw.match(/\((\d+)\)/)
+    const reviewsCount = reviewMatch ? parseInt(reviewMatch[1]) : 0
+
+    return {
+      id: l?.id,
+      name: l?.legacyName || l?.title || item?.title,
+      city: l?.legacyCity || l?.legacyLocalizedCityName || '',
+      avgRating,
+      reviewsCount,
+      description: l?.description || '',
+      pictures: pictures.map((p) => ({ large: p?.picture })),
+      pricingQuote: {
+        structuredStayDisplayPrice: {
+          primaryLine: { price },
+        },
+      },
     }
-  });
+  })
 
-  const rawListings = parseListingsPayload(response.data);
-  const normalized = rawListings.map(normalizeListing);
-
-  return normalized.filter((item) => {
-    const matchesQuery = !filters.query || item.title.toLowerCase().includes(filters.query.toLowerCase());
-    const matchesRating = !filters.minRating || item.rating === 0 || item.rating >= filters.minRating;
-    const matchesMin = filters.minPrice === undefined || item.pricePerNight >= filters.minPrice;
-    const matchesMax = filters.maxPrice === undefined || item.pricePerNight <= filters.maxPrice;
-    return matchesQuery && matchesRating && matchesMin && matchesMax;
-  });
+  return { data: { list: listings } }
 }
 
-export async function fetchListingDetails(id, filters) {
-  const listings = await fetchListings(filters);
-  return listings.find((listing) => listing.id === id) || null;
-}
-
-export function isRateLimitError(error) {
-  if (!axios.isAxiosError(error)) {
-    return false;
-  }
-  return error.response?.status === 429;
-}
-
-export function toUserErrorMessage(error) {
-  if (error instanceof Error && error.message.includes('VITE_RAPID_API_KEY')) {
-    return 'API key is missing in deployment settings. Add VITE_RAPID_API_KEY in Vercel and redeploy.';
-  }
-  if (!axios.isAxiosError(error)) {
-    return 'Unexpected error occurred. Please try again.';
-  }
-  if (error.response?.status === 429) {
-    return 'Rate limit reached. Please wait a moment and retry.';
-  }
-  if (error.code === 'ECONNABORTED') {
-    return 'Request timed out. Check your connection and try again.';
-  }
-  return 'Could not reach the listings service right now.';
-}
+export default api
